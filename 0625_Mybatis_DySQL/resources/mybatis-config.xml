@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 根节点 -->
+<configuration>
+	<!-- *必配，未加的为可选项 -->
+	<!-- 1.*引入同级目录下的数据库连接文件db.properties -->
+	<properties resource="db.properties" />
+
+	<!-- 2.配置log4J日志 -->
+	<settings>
+		<setting name="logImpl" value="LOG4J" />
+	</settings>
+	
+	<!-- resultType 别名 -->
+	<typeAliases>
+		<package name="com.chinasoft.pojo"/>
+	</typeAliases>
+	
+	<!-- 3.配置mybatis的事务处理,指定mybatis使用连接数据库的模式 -->
+	<environments default="development_mysql">
+		<environment id="development_mysql">
+			<!-- 配置事务管理采用的方式 -->
+			<transactionManager type="JDBC"></transactionManager>
+		
+			<!-- 配置数据源  name的值不能变，规定就这么写，value里的可改-->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${user}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- 4.配置相应的mapper文件 -->
+	<mappers>
+		<mapper resource="com/chinasoft/dao/user/UserMapper.xml"/>
+	</mappers>
+	
+	
+</configuration>

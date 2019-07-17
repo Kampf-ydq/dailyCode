@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SQL语句文件 -->
+
+<!-- mapper可以有多个，但是命名空间不能重 -->
+<mapper namespace="com.chinasoft.dao.StudentMapper">
+
+	<select id="getStuList" resultType="Student">
+		select * from t_student
+	</select>
+	
+	<!-- 对象入参 -->
+	<select id="getStuByClass" resultType="Student" parameterType="Student">
+		select * from t_student where s_class like concat ('%',#{s_class},'%')
+	</select>
+	
+	
+	<!-- 当数据库字段与pojo对象里的变量不一致的时候，需要用到resultMap做映射,
+	result中的property对应pojo类中的属性 ，column对应数据库中的字段 -->
+	
+	<!-- 对应显示的是User.java中的内容 -->
+	<resultMap type="Student" id="stulist">
+		<result property="s_id" column="s_id" />
+		<result property="s_name" column="s_name" />
+		<result property="s_age" column="s_age" />
+		<result property="s_sex" column="s_sex" />
+		<result property="s_class" column="s_class" />
+		<!-- <result property="roleName" column="r_name" /> -->
+		<!-- 映射多个字段信息 -->
+		<association property="role" javaType="Role" resultMap="roleResult" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          " />
+	</resultMap>
+	
+	<!-- 对应显示的是Role.java中的内容 -->
+	<resultMap type="Role" id="roleResult">
+		<result property="r_id" column="r_id" />
+		<result property="r_name" column="r_name" />
+		<result property="r_score" column="r_score" />
+	</resultMap>
+	
+	
+	<!-- 多表查询 -->
+	
+	<!-- SELECT t.*,r.`r_name` FROM t_student t,r_role r WHERE t.`s_id`=r.`r_id` -->
+	
+	<select id="getStuByTwoTable" resultMap="stulist" parameterType="Student">
+		SELECT t.*,r.r_name,r.r_score FROM t_student t,r_role r WHERE t.s_id=r.r_id  AND t.s_name=#{s_name}
+	</select>
+	
+	 <!-- map入参 -->
+	<!--<select id="getStuByMap" resultType="Student" parameterType="map">
+		select * from t_student where s_class like concat ('%',#{s_class},'%')
+	</select> -->
+	
+	<!-- <select id="countwhere">
+		select count(1) from t_student where s_name='张三'
+	</select> -->
+
+</mapper>
